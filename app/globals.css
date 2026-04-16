@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf9f7;
+  --foreground: #1a1a1a;
+  --primary: #2d5a3d;
+  --primary-light: #4a7c5f;
+  --accent: #c8973a;
+  --accent-light: #f5e6c8;
+  --card: #ffffff;
+  --border: #e8e4df;
+  --muted: #6b7280;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; font-size: 11pt; }
+  .recipe-print-card { break-inside: avoid; }
+}
