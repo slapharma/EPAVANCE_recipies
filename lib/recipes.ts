@@ -13,6 +13,11 @@ export interface Nutrition {
   fibre: number;
 }
 
+export interface Source {
+  label: string;
+  url: string;
+}
+
 export interface Recipe {
   id: string;
   name: string;
@@ -27,6 +32,12 @@ export interface Recipe {
   ingredients: Ingredient[];
   instructions: string[];
   gutHealthNote: string;
+  /** Extended supporting information — appears below the gut health note. */
+  additionalInfo?: string;
+  /** Credible references that support the gut health note. */
+  sources?: Source[];
+  /** Allergens present in this recipe (UK FSA-style 14 allergens, where applicable). */
+  allergens?: string[];
   nutrition: Nutrition;
   tip?: string;
   servingSuggestion?: string;
@@ -53,6 +64,19 @@ const IMAGES = {
   applePeanutButter: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=800&q=80',
   energyBalls: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=800&q=80',
   roastedChickpeas: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80',
+};
+
+// ─── Reusable source references (one URL, used by multiple recipes) ──────────
+const SRC = {
+  ccfDiet: { label: 'Crohn\'s & Colitis Foundation — Diet & Nutrition', url: 'https://www.crohnscolitisfoundation.org/diet-and-nutrition' },
+  ccukFood: { label: 'Crohn\'s & Colitis UK — Food', url: 'https://crohnsandcolitis.org.uk/info-support/information-about-crohns-and-colitis/all-information-about-crohns-and-colitis/food' },
+  espen: { label: 'ESPEN Guideline: Clinical Nutrition in IBD', url: 'https://www.espen.org/guidelines-home/espen-guidelines' },
+  bdaIbd: { label: 'British Dietetic Association — IBD Food Fact Sheet', url: 'https://www.bda.uk.com/resource/inflammatory-bowel-disease-diet.html' },
+  ccfMed: { label: 'Crohn\'s & Colitis Foundation — Mediterranean Diet', url: 'https://www.crohnscolitisfoundation.org/diet-and-nutrition/mediterranean-diet' },
+  monash: { label: 'Monash University FODMAP Programme', url: 'https://www.monashfodmap.com/' },
+  nccihTurmeric: { label: 'NCCIH — Turmeric Fact Sheet', url: 'https://www.nccih.nih.gov/health/turmeric' },
+  nccihGinger: { label: 'NCCIH — Ginger Fact Sheet', url: 'https://www.nccih.nih.gov/health/ginger' },
+  iffgd: { label: 'IFFGD — Fiber and Digestive Health', url: 'https://iffgd.org/gi-disorders/symptoms-causes/fiber/' },
 };
 
 export const recipes: Recipe[] = [
@@ -88,6 +112,9 @@ export const recipes: Recipe[] = [
       'Stir and enjoy. Add a drizzle of raw honey if desired.',
     ],
     gutHealthNote: 'Chia seeds and flaxseed provide soluble fibre that feeds beneficial gut bacteria, while blueberries deliver antioxidants that support gut lining health.',
+    additionalInfo: 'Soluble fibres ferment in the colon to produce short-chain fatty acids (notably butyrate) that fuel colonocytes — the cells that line the gut. Berry polyphenols have been shown in observational studies to associate with greater microbial diversity. People in active flare may prefer to grind the chia/flax to soften texture.',
+    sources: [SRC.bdaIbd, SRC.iffgd],
+    allergens: ['Tree nuts (almonds, walnuts)', 'Dairy (if using Greek yogurt)'],
     nutrition: { calories: 350, protein: 11, carbs: 20, fat: 25, fibre: 14 },
   },
   {
@@ -120,6 +147,9 @@ export const recipes: Recipe[] = [
       'Serve immediately.',
     ],
     gutHealthNote: 'Blueberries are rich in polyphenols that support a diverse gut microbiome, while chia seeds add soluble fibre for digestive comfort.',
+    additionalInfo: 'Blending breaks down the cell walls of berries, which can make their polyphenols more bioavailable but also delivers a quick sugar load — adding almond butter and chia slows gastric emptying and softens the glycaemic response.',
+    sources: [SRC.ccukFood, SRC.iffgd],
+    allergens: ['Tree nuts (almond butter, almond milk)'],
     nutrition: { calories: 245, protein: 6, carbs: 25, fat: 14, fibre: 9 },
   },
   {
@@ -156,6 +186,9 @@ export const recipes: Recipe[] = [
       'Serve with fresh berries, nut butter or dairy-free yogurt.',
     ],
     gutHealthNote: 'Oat flour provides beta-glucan fibre that supports gut bacteria diversity, while eggs deliver complete protein for tissue repair.',
+    additionalInfo: 'Beta-glucan is a viscous soluble fibre with prebiotic activity. Crucially, use certified gluten-free oats — standard oats are frequently cross-contaminated with wheat during milling and may trigger symptoms in coeliac-overlap IBD patients.',
+    sources: [SRC.bdaIbd, SRC.espen],
+    allergens: ['Eggs', 'Tree nuts (almond milk)', 'Oats — use certified gluten-free'],
     nutrition: { calories: 350, protein: 26, carbs: 32, fat: 13, fibre: 5 },
   },
   {
@@ -199,6 +232,9 @@ export const recipes: Recipe[] = [
       'Serve with dairy-free yogurt and fresh berries.',
     ],
     gutHealthNote: 'Oats and seeds provide a variety of fibres and prebiotics that nourish different strains of beneficial gut bacteria.',
+    additionalInfo: 'Microbial diversity benefits from "dietary fibre diversity" — multiple fibre sources outperform a single source. This recipe combines beta-glucan (oats), lignans (flax/chia), and resistant starch (cooled oats), giving the microbiome a varied substrate. If seeds are poorly tolerated in flare, blend the granola briefly before serving.',
+    sources: [SRC.iffgd, SRC.ccfDiet],
+    allergens: ['Tree nuts (almonds, optional walnuts, coconut)', 'Oats — use certified gluten-free'],
     nutrition: { calories: 230, protein: 9, carbs: 20, fat: 14, fibre: 5 },
   },
   {
@@ -235,6 +271,9 @@ export const recipes: Recipe[] = [
       'Finish with optional garnishes.',
     ],
     gutHealthNote: 'Avocado provides prebiotic fibre and healthy fats, while eggs deliver complete protein and important B vitamins for gut lining support.',
+    additionalInfo: 'Sourdough fermentation breaks down some FODMAPs (notably fructans), which is why genuine long-fermented sourdough is often better tolerated than standard wheat bread — but only if you do not require strict gluten avoidance. Harissa is generally well-tolerated in remission; reduce or omit during active flare.',
+    sources: [SRC.monash, SRC.ccukFood],
+    allergens: ['Eggs', 'Gluten (sourdough — unless GF)', 'Sesame (if added)'],
     nutrition: { calories: 380, protein: 20, carbs: 22, fat: 24, fibre: 8 },
   },
   {
@@ -267,6 +306,9 @@ export const recipes: Recipe[] = [
       'Serve immediately.',
     ],
     gutHealthNote: 'Ginger has long been used to support digestion and reduce nausea, while flaxseed provides soluble fibre that helps regulate bowel movements.',
+    additionalInfo: 'Ginger\'s active compounds (gingerols, shogaols) appear to accelerate gastric emptying and reduce nausea — useful for IBD patients on medications that slow GI transit. Mango contains amylase enzymes that may aid carbohydrate digestion. Coconut milk is generally low FODMAP in modest serves (≈250 ml).',
+    sources: [SRC.nccihGinger, SRC.monash],
+    allergens: ['Coconut (FDA classifies as tree nut for labelling)'],
     nutrition: { calories: 210, protein: 3, carbs: 36, fat: 6, fibre: 5 },
   },
   {
@@ -299,6 +341,9 @@ export const recipes: Recipe[] = [
       'Serve immediately.',
     ],
     gutHealthNote: 'Strawberries are rich in vitamin C and polyphenols that support gut barrier integrity, while chia seeds add soluble fibre for digestive regularity.',
+    additionalInfo: 'Vitamin C is a co-factor for collagen synthesis — relevant for repair of inflamed gut tissue. The seed coats of strawberries are a source of insoluble fibre; if texture is irritating during flare, strain or use seedless berry purées.',
+    sources: [SRC.bdaIbd, SRC.ccukFood],
+    allergens: ['Tree nuts (almond butter, almond milk)'],
     nutrition: { calories: 295, protein: 8, carbs: 35, fat: 16, fibre: 10 },
   },
 
@@ -347,6 +392,9 @@ export const recipes: Recipe[] = [
       'Drizzle with tahini dressing and toss gently.',
     ],
     gutHealthNote: 'Chickpeas provide fibre and plant protein that support gut microbiome diversity, while avocado and tahini deliver healthy fats that help nutrient absorption.',
+    additionalInfo: 'Chickpeas contain galacto-oligosaccharides (GOS) — a fermentable fibre that some IBD patients tolerate poorly during flare. Rinsing canned chickpeas thoroughly reduces GOS content. Roasting also alters the carbohydrate profile, generally improving tolerability. Start with smaller portions.',
+    sources: [SRC.monash, SRC.ccfDiet],
+    allergens: ['Sesame (tahini)'],
     nutrition: { calories: 330, protein: 9, carbs: 24, fat: 24, fibre: 10 },
   },
   {
@@ -380,6 +428,9 @@ export const recipes: Recipe[] = [
     ],
     tip: 'Substitute sardines with tinned tuna or salmon for a similar protein and omega-3 boost.',
     gutHealthNote: 'Sardines are rich in omega-3 fatty acids that support the gut lining, while quinoa provides plant protein and gentle fibre.',
+    additionalInfo: 'Long-chain omega-3s (EPA and DHA) from oily fish are precursors to specialised pro-resolving mediators that help dampen inflammation. ESPEN guidelines recommend oily fish 2–3 times per week for IBD patients in remission. Quinoa is naturally gluten-free and tends to be better tolerated than wheat-based grains.',
+    sources: [SRC.espen, SRC.ccfMed],
+    allergens: ['Fish (sardines)'],
     nutrition: { calories: 520, protein: 28, carbs: 42, fat: 28, fibre: 9 },
   },
   {
@@ -416,6 +467,9 @@ export const recipes: Recipe[] = [
       'Toss gently to combine and serve.',
     ],
     gutHealthNote: 'Red lentil pasta provides fibre and plant protein, while tuna contributes omega-3 fatty acids and vegetables add additional fibre and micronutrients.',
+    additionalInfo: 'Red lentil pasta typically delivers ~12 g protein and ~5 g fibre per 80 g serve — significantly more than wheat pasta, with a lower glycaemic load. Choose tuna packed in olive oil rather than brine for the omega-3 + monounsaturated fat profile that supports the Mediterranean pattern.',
+    sources: [SRC.ccfMed, SRC.espen],
+    allergens: ['Fish (tuna)'],
     nutrition: { calories: 410, protein: 34, carbs: 30, fat: 15, fibre: 9 },
   },
 
@@ -457,6 +511,9 @@ export const recipes: Recipe[] = [
       'Season with salt and pepper. Serve over brown rice.',
     ],
     gutHealthNote: 'Lean chicken provides high-quality protein, while colourful vegetables contribute fibre and phytonutrients that support overall digestive health.',
+    additionalInfo: 'Quick-cook stir fries retain more heat-sensitive nutrients (vitamin C, folate) than long-cooked dishes. Coconut aminos is lower in sodium and free of gluten and soy — useful if you react to standard soy sauce. Garlic contains fructans (a high-FODMAP fibre); use garlic-infused oil instead during a flare.',
+    sources: [SRC.monash, SRC.ccukFood],
+    allergens: ['Soy (if using tamari)', 'Sesame (sesame oil)'],
     nutrition: { calories: 355, protein: 34, carbs: 22, fat: 14, fibre: 4 },
   },
   {
@@ -508,6 +565,9 @@ export const recipes: Recipe[] = [
       'Fill each tortilla with chicken and avocado slaw. Serve immediately.',
     ],
     gutHealthNote: 'Lean chicken provides high-quality protein, while cabbage and avocado contribute fibre and healthy fats that support overall digestive health.',
+    additionalInfo: 'Cabbage is a brassica — these vegetables contain glucosinolates with potential anti-inflammatory effects, but raw brassicas can be gas-producing. Lightly massaging shredded cabbage with lime juice and a little salt softens the fibres and improves tolerability. Choose tortillas labelled "100% corn" to confirm absence of wheat blends.',
+    sources: [SRC.ccfDiet, SRC.bdaIbd],
+    allergens: [],
     nutrition: { calories: 420, protein: 32, carbs: 28, fat: 20, fibre: 7 },
   },
   {
@@ -542,6 +602,9 @@ export const recipes: Recipe[] = [
       'Serve salmon with sautéed spinach and lentils or brown rice.',
     ],
     gutHealthNote: 'Salmon provides omega-3 fatty acids that support gut lining integrity, while leafy greens and whole grains add fibre and important micronutrients.',
+    additionalInfo: 'A typical 150 g salmon fillet delivers ~2.5 g of EPA + DHA — meeting the daily intake associated with anti-inflammatory benefit in observational IBD research. Spinach is rich in folate and magnesium, both of which are commonly deficient in active IBD due to malabsorption.',
+    sources: [SRC.espen, SRC.ccfMed],
+    allergens: ['Fish (salmon)'],
     nutrition: { calories: 420, protein: 30, carbs: 17, fat: 24, fibre: 3 },
   },
   {
@@ -587,6 +650,9 @@ export const recipes: Recipe[] = [
       'Drizzle with dressing, toss gently and finish with parsley.',
     ],
     gutHealthNote: 'Lentils provide plant protein and fibre that support gut microbiome diversity, while vegetables and olive oil reflect Mediterranean eating patterns linked to digestive health.',
+    additionalInfo: 'A 100 g cooked-lentil portion provides ~9 g protein and ~8 g fibre, including resistant starch that ferments to produce butyrate. Adherence to a Mediterranean dietary pattern has been associated with reduced symptom severity in Crohn\'s disease in observational cohorts. Use canned lentils, well rinsed, if dried preparation isn\'t practical.',
+    sources: [SRC.ccfMed, SRC.espen],
+    allergens: [],
     nutrition: { calories: 300, protein: 11, carbs: 24, fat: 18, fibre: 9 },
   },
   {
@@ -625,6 +691,9 @@ export const recipes: Recipe[] = [
     ],
     servingSuggestion: 'Serve with quinoa or wild rice for a more filling, balanced meal.',
     gutHealthNote: 'Seabass provides high-quality protein and omega-3 fatty acids, while vegetables and olive oil reflect the Mediterranean diet pattern linked to reduced inflammation.',
+    additionalInfo: 'White fish like seabass delivers omega-3s in a leaner package than oily fish, often with a milder flavour and easier digestion. Roasting vegetables alongside the fish concentrates their natural sugars without requiring added fats — keeping the dish light and well-tolerated for most IBD patients in remission.',
+    sources: [SRC.espen, SRC.ccfMed],
+    allergens: ['Fish (seabass)'],
     nutrition: { calories: 320, protein: 32, carbs: 8, fat: 18, fibre: 2 },
   },
   {
@@ -666,6 +735,9 @@ export const recipes: Recipe[] = [
     tip: 'If you are sensitive to onion, use the green part of a leek as a lower FODMAP alternative.',
     servingSuggestion: 'Serve with toasted sourdough or gluten-free bread.',
     gutHealthNote: 'Sweet potatoes provide fibre and beta-carotene, while ginger has traditionally been used to support digestion and reduce digestive discomfort.',
+    additionalInfo: 'Pureeing reduces the mechanical fibre load — a useful strategy during mild flares when whole-form vegetables are poorly tolerated. Sweet potato is a source of vitamin A precursors important for epithelial repair. Onion contains fructans (high FODMAP); the leek-greens swap in the tip preserves flavour without the fructan.',
+    sources: [SRC.nccihGinger, SRC.monash],
+    allergens: ['Tree nuts (almond milk, if used)', 'Coconut (if used)'],
     nutrition: { calories: 200, protein: 3, carbs: 31, fat: 7, fibre: 6 },
   },
 
@@ -699,6 +771,9 @@ export const recipes: Recipe[] = [
       'Add a drizzle of raw honey if desired. Serve immediately.',
     ],
     gutHealthNote: 'Apples contain pectin, a prebiotic fibre that feeds beneficial gut bacteria, while nuts and seeds provide healthy fats and additional fibre.',
+    additionalInfo: 'Pectin is a soluble fibre that ferments to short-chain fatty acids supporting colonic health. The skin of the apple holds most of the pectin and quercetin (an antioxidant) — leave the skin on unless texture is an issue. Some IBD patients react to apple fructose; portion size matters.',
+    sources: [SRC.iffgd, SRC.monash],
+    allergens: ['Tree nuts (almond butter, walnuts)'],
     nutrition: { calories: 260, protein: 7, carbs: 25, fat: 17, fibre: 6 },
   },
   {
@@ -736,6 +811,9 @@ export const recipes: Recipe[] = [
       'Refrigerate in an airtight container for up to 1 week.',
     ],
     gutHealthNote: 'Dates provide natural fibre that supports digestion, while nuts and seeds add healthy fats and plant protein for sustained energy.',
+    additionalInfo: 'Medjool dates supply a mix of glucose, fructose and fibre — a slower energy release than refined sugar snacks. Cocoa contains flavanols associated with anti-inflammatory effects. If sulphite-treated dried fruit is a concern, source unsulphured Medjools (most are).',
+    sources: [SRC.iffgd, SRC.bdaIbd],
+    allergens: ['Tree nuts (almonds)', 'Peanuts (if using peanut butter)', 'Coconut'],
     nutrition: { calories: 120, protein: 3, carbs: 12, fat: 7, fibre: 2 },
   },
   {
@@ -767,6 +845,9 @@ export const recipes: Recipe[] = [
     ],
     tip: 'If chickpeas are difficult to digest, substitute with roasted pumpkin seeds.',
     gutHealthNote: 'Chickpeas provide fibre and plant protein, while turmeric contains curcumin — a compound commonly used in anti-inflammatory cooking.',
+    additionalInfo: 'Curcumin\'s bioavailability is poor on its own; the black pepper in this recipe contains piperine, which research suggests increases curcumin absorption substantially. Curcumin has been studied as an adjunct therapy in mild-to-moderate ulcerative colitis with promising but preliminary results.',
+    sources: [SRC.nccihTurmeric, SRC.ccfDiet],
+    allergens: [],
     nutrition: { calories: 190, protein: 7, carbs: 20, fat: 9, fibre: 6 },
   },
 ];
@@ -806,4 +887,68 @@ export function filterRecipes(opts: {
     }
     return true;
   });
+}
+
+// ─── Ingredient quantity scaling ─────────────────────────────────────────────
+// Scales ingredient strings ("1 cup", "½ tbsp", "200 ml") by a multiplier so
+// the recipe detail page can show quantities for an arbitrary serving count.
+
+const UNICODE_FRACTIONS: Record<string, number> = {
+  '½': 0.5, '¼': 0.25, '¾': 0.75,
+  '⅓': 1 / 3, '⅔': 2 / 3,
+  '⅛': 0.125, '⅜': 0.375, '⅝': 0.625, '⅞': 0.875,
+  '⅕': 0.2, '⅖': 0.4, '⅗': 0.6, '⅘': 0.8,
+  '⅙': 1 / 6, '⅚': 5 / 6,
+};
+
+function decimalToFraction(value: number): string {
+  if (Math.abs(value - Math.round(value)) < 0.02) return String(Math.round(value));
+  const whole = Math.floor(value);
+  const frac = value - whole;
+  // Try to match common fractions within 0.04 tolerance
+  const targets: [string, number][] = [
+    ['⅛', 0.125], ['¼', 0.25], ['⅓', 1 / 3], ['⅜', 0.375],
+    ['½', 0.5], ['⅝', 0.625], ['⅔', 2 / 3], ['¾', 0.75], ['⅞', 0.875],
+  ];
+  let best = targets[0];
+  let bestDelta = Math.abs(frac - best[1]);
+  for (const t of targets) {
+    const d = Math.abs(frac - t[1]);
+    if (d < bestDelta) { bestDelta = d; best = t; }
+  }
+  if (bestDelta < 0.04) {
+    return whole > 0 ? `${whole} ${best[0]}` : best[0];
+  }
+  // Fall back to one decimal place
+  return value.toFixed(1).replace(/\.0$/, '');
+}
+
+/** Scale an ingredient string by `multiplier`. Leaves non-numeric phrasing
+ *  ("Pinch", "Small handful", "Juice of ½ lemon", "Salt to taste") unchanged. */
+export function scaleIngredient(text: string, multiplier: number): string {
+  if (multiplier === 1) return text;
+
+  // Match leading "1", "1.5", "½", "1 ½", "1½", "2-3", etc.
+  // Group: optional whole number, optional space, optional unicode fraction.
+  const re = /^(\d+(?:\.\d+)?(?:\s*[\u00BC-\u00BE\u2150-\u215E])?|[\u00BC-\u00BE\u2150-\u215E])(\s)/;
+  const match = text.match(re);
+  if (!match) return text; // No leading numeric quantity — leave alone
+
+  const numericStr = match[1];
+  let value = 0;
+  // Strip whitespace then parse
+  const cleaned = numericStr.replace(/\s+/g, '');
+  // Separate any leading decimal/integer from unicode fraction
+  const fractionMatch = cleaned.match(/([\u00BC-\u00BE\u2150-\u215E])$/);
+  if (fractionMatch) {
+    const intPart = cleaned.slice(0, -1);
+    value = (intPart ? parseFloat(intPart) : 0) + (UNICODE_FRACTIONS[fractionMatch[1]] ?? 0);
+  } else {
+    value = parseFloat(cleaned);
+  }
+
+  if (!isFinite(value) || value === 0) return text;
+  const scaled = value * multiplier;
+  const formatted = decimalToFraction(scaled);
+  return text.replace(re, formatted + match[2]);
 }

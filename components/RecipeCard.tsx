@@ -1,13 +1,7 @@
 import { Recipe } from '@/lib/recipes';
 import Link from 'next/link';
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
-  breakfast: { bg: '#fff8ec', text: '#92600a' },
-  lunch: { bg: '#edf4ef', text: '#2d5a3d' },
-  dinner: { bg: '#f0f4ff', text: '#2d3d8a' },
-  snacks: { bg: '#fdf2f8', text: '#7c3d8a' },
-};
-
+// All four categories share the teal brand look; the icon carries the distinction.
 const CATEGORY_ICONS: Record<string, string> = {
   breakfast: '🌅',
   lunch: '🥗',
@@ -16,30 +10,31 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
-  const cat = CATEGORY_COLORS[recipe.category];
   const totalTime = recipe.prepTime + recipe.cookTime;
 
   return (
     <Link href={`/recipes/${recipe.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <article style={{
         background: '#fff',
-        borderRadius: 16,
+        borderRadius: 8,
         overflow: 'hidden',
         border: '1px solid var(--border)',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        boxShadow: '0 3px 6px rgba(0,0,0,0.04)',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         cursor: 'pointer',
       }}
         onMouseEnter={e => {
-          (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)';
-          (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
+          (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)';
+          (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 20px rgba(0,128,128,0.12)';
+          (e.currentTarget as HTMLElement).style.borderColor = 'var(--primary-soft)';
         }}
         onMouseLeave={e => {
           (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-          (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 4px rgba(0,0,0,0.06)';
+          (e.currentTarget as HTMLElement).style.boxShadow = '0 3px 6px rgba(0,0,0,0.04)';
+          (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
         }}
       >
         {/* Image */}
@@ -52,11 +47,11 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           />
           <div style={{
             position: 'absolute', top: 12, left: 12,
-            background: cat.bg, color: cat.text,
-            padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600,
-            display: 'flex', alignItems: 'center', gap: 4,
-            backdropFilter: 'blur(4px)',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+            background: '#fff', color: 'var(--primary-dark)',
+            padding: '4px 11px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+            display: 'flex', alignItems: 'center', gap: 5,
+            boxShadow: '0 2px 5px rgba(0,0,0,0.08)',
+            border: '1px solid var(--primary-soft)',
           }}>
             <span>{CATEGORY_ICONS[recipe.category]}</span>
             {recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}
@@ -65,17 +60,17 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
 
         {/* Content */}
         <div style={{ padding: '18px 18px 20px', flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, lineHeight: 1.3, color: 'var(--foreground)', margin: 0 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.3, color: 'var(--foreground)', margin: 0, letterSpacing: '-0.01em' }}>
             {recipe.name}
           </h3>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.5, margin: 0, flex: 1 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.55, margin: 0, flex: 1 }}>
             {recipe.description}
           </p>
 
           {/* Tags */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {recipe.tags.slice(0, 3).map(tag => (
-              <span key={tag} style={{ fontSize: 11, fontWeight: 500, background: '#edf4ef', color: '#2d5a3d', padding: '3px 9px', borderRadius: 20 }}>
+              <span key={tag} style={{ fontSize: 11, fontWeight: 500, background: 'var(--primary-wash)', color: 'var(--primary-dark)', padding: '3px 9px', borderRadius: 8, border: '1px solid var(--primary-soft)' }}>
                 {tag}
               </span>
             ))}
@@ -101,7 +96,7 @@ function Stat({ icon, value, label }: { icon: string; value: string; label: stri
   return (
     <div style={{ textAlign: 'center', flex: 1 }}>
       <div style={{ fontSize: 14 }}>{icon}</div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--foreground)', lineHeight: 1.2 }}>{value}</div>
+      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--foreground)', lineHeight: 1.2 }}>{value}</div>
       <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.3px' }}>{label}</div>
     </div>
   );

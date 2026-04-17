@@ -37,29 +37,28 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, var(--primary) 0%, #1a3d2b 100%)', color: '#fff', padding: '56px 24px 48px' }}>
-        <div style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(200,151,58,0.2)', color: '#f0c96e', padding: '6px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600, marginBottom: 20, border: '1px solid rgba(200,151,58,0.35)' }}>
+      {/* Hero — clean, EPAVANCE-style: white background, teal brand accents, no dark overlay */}
+      <section style={{ background: 'var(--primary-wash)', color: 'var(--foreground)', padding: '64px 24px 56px', borderBottom: '1px solid var(--primary-soft)' }}>
+        <div style={{ maxWidth: 820, margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ display: 'inline-block', background: '#fff', color: 'var(--primary)', padding: '6px 16px', borderRadius: 8, fontSize: 12, fontWeight: 600, marginBottom: 22, border: '1.5px solid var(--primary-soft)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
             IBD-Friendly Eating
           </div>
-          <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 700, marginBottom: 16, lineHeight: 1.2, letterSpacing: '-0.5px' }}>
+          <h1 style={{ fontSize: 'clamp(30px, 5vw, 50px)', fontWeight: 600, marginBottom: 18, lineHeight: 1.15, letterSpacing: '-0.02em', color: 'var(--foreground)' }}>
             Gut-Friendly Recipes
           </h1>
-          <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, maxWidth: 580, margin: '0 auto 32px' }}>
-            Anti-inflammatory, whole-food recipes designed to nourish and support people living with IBD.
-            Free from gluten, dairy, and refined sugars.
+          <p style={{ fontSize: 17, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 620, margin: '0 auto 32px' }}>
+            Anti-inflammatory, whole-food recipes designed to nourish and support people living with IBD. Free from gluten, dairy, and refined sugars.
           </p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
             {[
               { icon: '🌱', label: `${recipes.length} Recipes` },
               { icon: '⚡', label: 'Quick to prepare' },
               { icon: '🍃', label: 'Whole food ingredients' },
               { icon: '💚', label: 'IBD-conscious' },
             ].map(item => (
-              <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.1)', padding: '8px 16px', borderRadius: 20, fontSize: 14 }}>
+              <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', padding: '8px 16px', borderRadius: 8, fontSize: 13, border: '1px solid var(--primary-soft)' }}>
                 <span>{item.icon}</span>
-                <span style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 500 }}>{item.label}</span>
+                <span style={{ color: 'var(--foreground)', fontWeight: 500 }}>{item.label}</span>
               </div>
             ))}
           </div>
@@ -67,7 +66,7 @@ export default function Home() {
       </section>
 
       {/* Sticky Search & Filters */}
-      <section className="no-print" style={{ background: '#fff', borderBottom: '1px solid var(--border)', position: 'sticky', top: 0, zIndex: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+      <section className="no-print" style={{ background: '#fff', borderBottom: '1px solid var(--border)', position: 'sticky', top: 0, zIndex: 10, boxShadow: '0 3px 6px rgba(0,0,0,0.05)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '14px 24px' }}>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{ flex: 1, minWidth: 200, position: 'relative' }}>
@@ -77,26 +76,26 @@ export default function Home() {
                 placeholder="Search recipes, ingredients, tags..."
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                style={{ width: '100%', padding: '9px 12px 9px 36px', borderRadius: 8, border: '1.5px solid var(--border)', fontSize: 14, outline: 'none', background: 'var(--background)' }}
+                style={{ width: '100%', padding: '10px 12px 10px 36px', borderRadius: 8, border: '1.5px solid var(--border)', fontSize: 14, outline: 'none', background: '#fff', fontFamily: 'inherit' }}
               />
             </div>
             <button
               onClick={() => setFiltersOpen(v => !v)}
-              style={{ padding: '9px 16px', borderRadius: 8, border: '1.5px solid var(--border)', background: filtersOpen || activeTags.length ? 'var(--primary)' : '#fff', color: filtersOpen || activeTags.length ? '#fff' : 'var(--foreground)', fontSize: 14, fontWeight: 500, cursor: 'pointer' }}
+              style={{ padding: '10px 18px', borderRadius: 8, border: '1.5px solid', borderColor: filtersOpen || activeTags.length ? 'var(--primary)' : 'var(--border)', background: filtersOpen || activeTags.length ? 'var(--primary)' : '#fff', color: filtersOpen || activeTags.length ? '#fff' : 'var(--foreground)', fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
             >
               ⚙️ Filters {activeTags.length > 0 && `(${activeTags.length})`}
             </button>
             {hasFilters && (
-              <button onClick={clearAll} style={{ padding: '9px 14px', borderRadius: 8, border: '1.5px solid #fee2e2', background: '#fff', color: '#ef4444', fontSize: 13, fontWeight: 500, cursor: 'pointer' }}>
+              <button onClick={clearAll} style={{ padding: '10px 14px', borderRadius: 8, border: '1.5px solid #fee2e2', background: '#fff', color: '#ef4444', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}>
                 ✕ Clear
               </button>
             )}
           </div>
 
           {/* Category pills */}
-          <div style={{ display: 'flex', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
             {CATEGORIES.map(cat => (
-              <button key={cat.value} onClick={() => setCategory(cat.value)} style={{ padding: '5px 14px', borderRadius: 20, fontSize: 13, fontWeight: 500, cursor: 'pointer', border: '1.5px solid', borderColor: category === cat.value ? 'var(--primary)' : 'var(--border)', background: category === cat.value ? 'var(--primary)' : '#fff', color: category === cat.value ? '#fff' : 'var(--foreground)' }}>
+              <button key={cat.value} onClick={() => setCategory(cat.value)} style={{ padding: '6px 16px', borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: 'pointer', border: '1.5px solid', borderColor: category === cat.value ? 'var(--primary)' : 'var(--border)', background: category === cat.value ? 'var(--primary)' : '#fff', color: category === cat.value ? '#fff' : 'var(--foreground)', fontFamily: 'inherit' }}>
                 {cat.label}
               </button>
             ))}
@@ -104,7 +103,7 @@ export default function Home() {
 
           {/* Expanded filters */}
           {filtersOpen && (
-            <div style={{ marginTop: 14, padding: 18, background: 'var(--background)', borderRadius: 10, border: '1px solid var(--border)' }}>
+            <div style={{ marginTop: 14, padding: 18, background: 'var(--primary-pale)', borderRadius: 8, border: '1px solid var(--primary-soft)' }}>
               {[
                 { label: 'Dietary', tags: DIETARY_TAGS },
                 { label: 'Nutritional', tags: NUTRITION_TAGS },
@@ -114,7 +113,7 @@ export default function Home() {
                   <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: 8 }}>{group.label}</div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     {group.tags.map(tag => (
-                      <button key={tag} onClick={() => toggleTag(tag)} style={{ padding: '6px 12px', borderRadius: 20, fontSize: 12, cursor: 'pointer', border: '1.5px solid', fontWeight: activeTags.includes(tag) ? 600 : 400, borderColor: activeTags.includes(tag) ? 'var(--primary)' : 'var(--border)', background: activeTags.includes(tag) ? '#edf4ef' : '#fff', color: activeTags.includes(tag) ? 'var(--primary)' : 'var(--foreground)' }}>
+                      <button key={tag} onClick={() => toggleTag(tag)} style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer', border: '1.5px solid', fontWeight: activeTags.includes(tag) ? 600 : 400, borderColor: activeTags.includes(tag) ? 'var(--primary)' : 'var(--border)', background: activeTags.includes(tag) ? 'var(--primary-wash)' : '#fff', color: activeTags.includes(tag) ? 'var(--primary-dark)' : 'var(--foreground)', fontFamily: 'inherit' }}>
                         {activeTags.includes(tag) && '✓ '}{tag}
                       </button>
                     ))}
@@ -125,7 +124,7 @@ export default function Home() {
                 <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: 8 }}>Total Time</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   {TIME_OPTIONS.map(opt => (
-                    <button key={opt.value} onClick={() => setMaxTime(opt.value)} style={{ padding: '6px 12px', borderRadius: 20, fontSize: 12, cursor: 'pointer', border: '1.5px solid', borderColor: maxTime === opt.value ? 'var(--accent)' : 'var(--border)', background: maxTime === opt.value ? '#fef9ec' : '#fff', color: maxTime === opt.value ? '#92600a' : 'var(--foreground)', fontWeight: maxTime === opt.value ? 600 : 400 }}>
+                    <button key={opt.value} onClick={() => setMaxTime(opt.value)} style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer', border: '1.5px solid', borderColor: maxTime === opt.value ? 'var(--primary)' : 'var(--border)', background: maxTime === opt.value ? 'var(--primary-wash)' : '#fff', color: maxTime === opt.value ? 'var(--primary-dark)' : 'var(--foreground)', fontWeight: maxTime === opt.value ? 600 : 400, fontFamily: 'inherit' }}>
                       {opt.label}
                     </button>
                   ))}
@@ -137,13 +136,13 @@ export default function Home() {
       </section>
 
       {/* Recipe Grid */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
+      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '36px 24px 64px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
           <h2 style={{ fontSize: 17, fontWeight: 600, color: 'var(--foreground)' }}>
             {results.length} recipe{results.length !== 1 ? 's' : ''}
             {category !== 'all' && <span style={{ color: 'var(--muted)', fontWeight: 400 }}> · {category.charAt(0).toUpperCase() + category.slice(1)}</span>}
           </h2>
-          <a href="/meal-plan" style={{ background: 'var(--primary)', color: '#fff', padding: '9px 18px', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
+          <a href="/meal-plan" style={{ background: 'var(--primary)', color: '#fff', padding: '10px 20px', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600, boxShadow: '0 3px 6px rgba(0,128,128,0.15)' }}>
             📅 Build Meal Plan
           </a>
         </div>
@@ -153,7 +152,7 @@ export default function Home() {
             <div style={{ fontSize: 48, marginBottom: 16 }}>🥗</div>
             <p style={{ fontSize: 18, fontWeight: 600, marginBottom: 8, color: 'var(--foreground)' }}>No recipes found</p>
             <p style={{ fontSize: 14, marginBottom: 20 }}>Try adjusting your search or removing some filters</p>
-            <button onClick={clearAll} style={{ padding: '10px 24px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600 }}>Clear All Filters</button>
+            <button onClick={clearAll} style={{ padding: '11px 24px', background: 'var(--primary)', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit' }}>Clear All Filters</button>
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 24 }}>
