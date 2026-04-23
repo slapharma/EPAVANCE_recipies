@@ -49,17 +49,20 @@ export default function Home() {
           <p style={{ fontSize: 17, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 620, margin: '0 auto 32px' }}>
             Anti-inflammatory, whole-food recipes designed to nourish and support people living with IBD. Free from gluten, dairy, and refined sugars.
           </p>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: 'clamp(12px, 2.5vw, 28px)', flexWrap: 'wrap', justifyContent: 'center', rowGap: 8, fontSize: 13, color: 'var(--muted)' }}>
             {[
               { icon: '🌱', label: `${recipes.length} Recipes` },
               { icon: '⚡', label: 'Quick to prepare' },
               { icon: '🍃', label: 'Whole food ingredients' },
               { icon: '💚', label: 'IBD-conscious' },
-            ].map(item => (
-              <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#fff', padding: '8px 16px', borderRadius: 8, fontSize: 13, border: '1px solid var(--primary-soft)' }}>
-                <span>{item.icon}</span>
-                <span style={{ color: 'var(--foreground)', fontWeight: 500 }}>{item.label}</span>
-              </div>
+            ].map((item, i, arr) => (
+              <span key={item.label} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                <span aria-hidden="true">{item.icon}</span>
+                <span style={{ fontWeight: 500 }}>{item.label}</span>
+                {i < arr.length - 1 && (
+                  <span aria-hidden="true" style={{ marginLeft: 'clamp(12px, 2.5vw, 28px)', color: 'var(--primary-mid)', opacity: 0.7 }}>·</span>
+                )}
+              </span>
             ))}
           </div>
         </div>

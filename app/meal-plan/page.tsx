@@ -1,24 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { recipes, scaleIngredient, type Recipe, type Category } from '@/lib/recipes';
+import {
+  DAYS, MEAL_SLOTS, emptyWeek, loadPlan, savePlan,
+  type MealSlot, type WeekPlan, type DayPlan,
+} from '@/lib/mealPlan';
 import Link from 'next/link';
-
-type MealSlot = 'breakfast' | 'lunch' | 'dinner' | 'snack';
-type DayPlan = { [K in MealSlot]?: Recipe };
-type WeekPlan = { [day: string]: DayPlan };
-
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const MEAL_SLOTS: { slot: MealSlot; label: string; icon: string; category: Category }[] = [
-  { slot: 'breakfast', label: 'Breakfast', icon: '🌅', category: 'breakfast' },
-  { slot: 'lunch', label: 'Lunch', icon: '🥗', category: 'lunch' },
-  { slot: 'dinner', label: 'Dinner', icon: '🍽️', category: 'dinner' },
-  { slot: 'snack', label: 'Snack', icon: '🥜', category: 'snacks' },
-];
-
-function emptyWeek(): WeekPlan {
-  return Object.fromEntries(DAYS.map(d => [d, {}]));
-}
 
 function randomRecipeFor(category: Category, exclude?: string[]): Recipe | undefined {
   const pool = recipes.filter(r => r.category === category && !exclude?.includes(r.id));
@@ -28,6 +16,19 @@ function randomRecipeFor(category: Category, exclude?: string[]): Recipe | undef
 
 export default function MealPlanPage() {
   const [plan, setPlan] = useState<WeekPlan>(emptyWeek());
+  const [hydrated, setHydrated] = useState(false);
+
+  // Hydrate from localStorage on mount (not during SSR).
+  useEffect(() => {
+    setPlan(loadPlan());
+    setHydrated(true);
+  }, []);
+
+  // Persist any change back to localStorage — but not the initial empty
+  // pre-hydration state, or we'd overwrite the saved plan with empties.
+  useEffect(() => {
+    if (hydrated) savePlan(plan);
+  }, [plan, hydrated]);
   const [mode, setMode] = useState<'week' | 'day'>('week');
   const [activeDay, setActiveDay] = useState('Monday');
   const [pickerOpen, setPickerOpen] = useState<{ day: string; slot: MealSlot } | null>(null);
